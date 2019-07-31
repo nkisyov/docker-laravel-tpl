@@ -1,41 +1,50 @@
-# docker-laravel-tpl
-
-A simple Docker setup for runniung Laravel app.
-
 # Setup
 
-Remove the `.gitignore` file from `public-html` folder.  
-Copy your Laravel project source in `public-html` folder.  
-Have in mind composer is not installed in this template.  
+Optional: Chreate `.env` from `.env-example` file and ensure database config is the same as the one in `docker-compose.yml`. Then build and run the containers:
 
-Create environment file `.env` and edit it with preffered custom image name and port
-
-```bash
-cd docker/
-cp .env-example .env
+```
+docker-compose build
+docker-compose up -d
 ```
 
-Build Docker image
+Login in laravel-env container:
 
-```bash
-chmod +x cmd.sh # Optional, if execution rights are missing for in cmd.sh
+If you use git bash the command will look like:
 
-./cmd.sh build
+```
+# replace <container> with the coresponding id/name, check it with "docker ps" command
+winpty docker exec -it <container-id> bash
 ```
 
-# Usage
-
-App start
-```bash
-./cmd.sh run
+Then run these commands:
+```
+composer install --prefer-dist
 ```
 
-App stop
-```bash
-./cmd.sh stop
+
+# Commands
+
+```
+docker-compose up -d # -d is used to start in background
+
+docker-compose stop # just stop
+docker-compose down # stop and remove container data
+
+docker-compose logs -f # all containers
+docker-compose logs <container-id> -f # single container
+
+winpty docker exec -it <container-id> bash # log in container, winpty is for git bash
 ```
 
-For other commands
-```bash
-./cmd.sh -h
+# Create project
+```
+Create laravel project and move the files to the current directory
+
+# laravel
+composer create-project --prefer-dist laravel/laravel my-project
+
+# symfony
+wget https://get.symfony.com/cli/installer -O - | bash
+export PATH="$HOME/.symfony/bin:$PATH"
+symfony new --full my_project
 ```
